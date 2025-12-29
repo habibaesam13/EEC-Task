@@ -47,4 +47,11 @@ class ProductRepository implements BaseRepository
         return false;
     }
 
+    public function findCheapest($product){
+        return $product->pharmacies()
+            ->orderBy('pharmacy_product.price', 'asc') // pivot table price
+            ->limit(5)
+            ->get(['pharmacies.id', 'pharmacies.name', 'pharmacy_product.price'])
+            ->toArray();
+    }
 }
