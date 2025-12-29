@@ -2,9 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Contracts\BaseRepository;
 use App\Models\Pharmacy;
 
-class PharmacyRepository
+class PharmacyRepository implements BaseRepository
 {
     /**
      * Create a new class instance.
@@ -14,12 +15,13 @@ class PharmacyRepository
     {
         $this->model=$product;
     }
-    public function all(){
-        return $this->model->all();
+    public function query()
+    {
+        return $this->model->newQuery();
     }
 
     public function find($id){
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
     public function create(array $data)
     {

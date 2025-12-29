@@ -16,14 +16,17 @@ class ProductRepository implements BaseRepository
     {
         $this->model = $product;
     }
-    public function all()
+
+    public function query()
     {
-        return $this->model->all();
+        return $this->model->newQuery();
     }
+    
 
     public function find($id)
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
+
     }
     public function create(array $data)
     {
@@ -39,14 +42,10 @@ class ProductRepository implements BaseRepository
         }
         return null;
     }
-
-    public function delete($id)
+    
+    public function delete($product)
     {
-        $product = $this->model->find($id);
-        if ($product) {
-            return $product->delete();
-        }
-        return false;
+        return $product->delete();
     }
 
     public function findCheapest($product)
