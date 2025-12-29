@@ -14,13 +14,15 @@ class ProductRepository implements BaseRepository
     protected $model;
     public function __construct(Product $product)
     {
-        $this->model=$product;
+        $this->model = $product;
     }
-    public function all(){
+    public function all()
+    {
         return $this->model->all();
     }
 
-    public function find($id){
+    public function find($id)
+    {
         return $this->model->findOrFail($id);
     }
     public function create(array $data)
@@ -47,11 +49,21 @@ class ProductRepository implements BaseRepository
         return false;
     }
 
-    public function findCheapest($product){
+    public function findCheapest($product)
+    {
         return $product->pharmacies()
-            ->orderBy('pharmacy_product.price', 'asc') // pivot table price
+            ->select('pharmacies.id', 'pharmacies.name')
+            ->withPivot('price')
+            ->orderBy('pharmacy_product.price', 'asc')
             ->limit(5)
-            ->get(['pharmacies.id', 'pharmacies.name', 'pharmacy_product.price'])
+            ->get()
+            ->map(function ($pharmacy) {
+                return [
+                    'Pharmacy id'    => $pharmacy->id,
+                    'Pharmacy name'  => $pharmacy->name,
+                    'price' => (float) $pharmacy->pivot->price,
+                ];
+            })
             ->toArray();
     }
 }
