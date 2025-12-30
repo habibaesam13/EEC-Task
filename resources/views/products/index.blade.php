@@ -43,9 +43,16 @@ EEC - Products
             class="text-decoration-none text-dark d-block h-100">
 
             <div class="card h-100 shadow-sm product-card">
+                @php
+                $imagePath = public_path('storage/' . $product->image);
+                $imageUrl = file_exists($imagePath)
+                ? asset('storage/' . $product->image)
+                : asset('default_product_img.png');
+                @endphp
+
                 <img
                     loading="eager"
-                    src="{{ asset('storage/' . $product->image) }}"
+                    src="{{ $imageUrl }}"
                     class="card-img-top"
                     style="height:200px; object-fit:cover">
 

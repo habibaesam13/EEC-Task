@@ -48,9 +48,18 @@ Edit Product
 
                     <div class="mb-3">
                         <label class="form-label">Current Image</label><br>
-                        <img src="{{ asset('storage/'.$product->image) }}"
-                             width="120"
-                             class="rounded shadow">
+                        @php
+                $imagePath = public_path('storage/' . $product->image);
+                $imageUrl = file_exists($imagePath)
+                ? asset('storage/' . $product->image)
+                : asset('default_product_img.png');
+                @endphp
+
+                <img
+                    loading="eager"
+                    src="{{ $imageUrl }}"
+                    class="card-img-top"
+                    style="height:200px; object-fit:cover">
                     </div>
 
                     <div class="mb-3">

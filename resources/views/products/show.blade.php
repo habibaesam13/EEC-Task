@@ -29,9 +29,18 @@
 
     {{-- Product Info --}}
     <div class="col-md-6">
-        <img
-            src="{{ asset('storage/'.$product->image) }}"
-            class="img-fluid rounded shadow">
+        @php
+                $imagePath = public_path('storage/' . $product->image);
+                $imageUrl = file_exists($imagePath)
+                ? asset('storage/' . $product->image)
+                : asset('default_product_img.png');
+                @endphp
+
+                <img
+                    loading="eager"
+                    src="{{ $imageUrl }}"
+                    class="card-img-top"
+                    style="height:200px; object-fit:cover">
     </div>
 
     <div class="col-md-6">
