@@ -84,4 +84,9 @@ class ProductService
 
         return $this->repository->update($product, $data);
     }
+
+    public function getProductPharmacies(Product $product)
+    {
+        return $this->repository->getPharmaciesWithPrices($product);
+    }
 }

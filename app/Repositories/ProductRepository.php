@@ -32,7 +32,7 @@ class ProductRepository implements BaseRepository
         return $this->model->create($data);
     }
 
-    public function update( $product,  $data)
+    public function update($product,  $data)
     {
         $product->update($data);
         return $product;
@@ -70,5 +70,13 @@ class ProductRepository implements BaseRepository
                 ];
             })
             ->toArray();
+    }
+    public function getPharmaciesWithPrices(Product $product)
+    {
+        return $product->pharmacies()
+            ->select('pharmacies.id', 'pharmacies.name')
+            ->withPivot('price')
+            ->orderBy('pharmacy_product.price')
+            ->get();
     }
 }
