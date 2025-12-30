@@ -28,7 +28,7 @@ class EditProduct extends FormRequest
                 'string',
                 'max:255',
                 Rule::unique('products', 'title')->ignore(
-                    $this->route('product')->product_id
+                    $this->route('product')->id
                 ),
             ],
             'description' => 'sometimes|string|min:10',

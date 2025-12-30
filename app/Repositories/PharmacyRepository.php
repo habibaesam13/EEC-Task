@@ -11,9 +11,9 @@ class PharmacyRepository implements BaseRepository
      * Create a new class instance.
      */
     protected $model;
-    public function __construct(Pharmacy $product)
+    public function __construct(Pharmacy $pharmacy)
     {
-        $this->model=$product;
+        $this->model=$pharmacy;
     }
     public function query()
     {
@@ -28,21 +28,19 @@ class PharmacyRepository implements BaseRepository
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update($pharmacy, array $data)
     {
-        $product = $this->model->find($id);
-        if ($product) {
-            $product->update($data);
-            return $product;
+        if ($pharmacy) {
+            $pharmacy->update($data);
+            return $pharmacy;
         }
         return null;
     }
 
-    public function delete($id)
+    public function delete($pharmacy)
     {
-        $product = $this->model->find($id);
-        if ($product) {
-            return $product->delete();
+        if ($pharmacy) {
+            return $pharmacy->delete();
         }
         return false;
     }
