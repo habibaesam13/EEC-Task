@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Facades\Storage;
@@ -28,10 +29,10 @@ class ProductService
         $cheapest = $this->repository->findCheapest($product);
         return $cheapest;
     }
-    public function all(int $pageSize = 10)
+    public function all(?string $search = null, int $pageSize = 10)
     {
         return $this->repository
-            ->query()
+            ->search($search)
             ->cursorPaginate($pageSize);
     }
 
@@ -63,4 +64,14 @@ class ProductService
         }
         $this->repository->delete($product);
     }
+
+    public function show(int $productId)
+    {
+        $product = $this->repository->find($productId);
+        if (! $product) {
+            throw new \Exception('Product not found');
+        }
+        return $product;
+    }
+    public function update(array $data) {}
 }

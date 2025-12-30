@@ -21,9 +21,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        //dd($request->integer('per_page'));
         return response()->json(
-            $this->productService->all($request->integer('per_page', 10))
+            $this->productService->all(
+                $request->query('search'),
+                $request->query('per_page', 10)
+            )
         );
     }
 
@@ -45,9 +47,14 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(int $productId)
     {
-        //
+        try {
+            $product = $this->productService->show($productId);
+            return response()->json(['Product details' => $product], 200);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Product Does not exists'], 500);
+        }
     }
 
     /**
@@ -61,13 +68,12 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($product)
+    public function destroy($productId)
     {
-        try{
-            $this->productService->destroy($product);
-            return response()->json(['message' =>'Product Deleted'],200);
-        }
-        catch(\Throwable $e) {
+        try {
+            $this->productService->destroy($productId);
+            return response()->json(['message' => 'Product Deleted'], 200);
+        } catch (\Throwable $e) {
             return response()->json(['message' => 'Failed to Destroy product'], 500);
         }
     }

@@ -21,12 +21,11 @@ class ProductRepository implements BaseRepository
     {
         return $this->model->newQuery();
     }
-    
+
 
     public function find($id)
     {
         return $this->model->find($id);
-
     }
     public function create(array $data)
     {
@@ -42,10 +41,20 @@ class ProductRepository implements BaseRepository
         }
         return null;
     }
-    
+
     public function delete($product)
     {
         return $product->delete();
+    }
+    public function search(?string $q)
+    {
+        //search by title - description -price
+        return $this->query()
+            ->when($q, function ($query) use ($q) {
+                $query->where('title', 'like', "%{$q}%")
+                ->orWhere('description','like',"%{$q}%")
+                ->orwhere('price','<=',(float)$q);
+            });
     }
 
     public function findCheapest($product)
