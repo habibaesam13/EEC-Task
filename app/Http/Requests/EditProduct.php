@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditProduct extends FormRequest
@@ -22,7 +23,14 @@ class EditProduct extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'sometimes|string|max:255|unique:products,title',
+            'title' => [
+                'sometimes',
+                'string',
+                'max:255',
+                Rule::unique('products', 'title')->ignore(
+                    $this->route('product')->product_id
+                ),
+            ],
             'description' => 'sometimes|string|min:10',
             'image'       => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'price'       => 'sometimes|numeric|min:0.01',
@@ -33,12 +41,12 @@ class EditProduct extends FormRequest
     public function messages(): array
     {
         return [
-            
+
             'title.unique'         => 'This product title already exists.',
             'title.string'         => 'Product title must be a valid string.',
             'title.max'            => 'Product title cannot exceed 255 characters.',
 
-            
+
             'description.string'   => 'Product description must be text.',
             'description.min'      => 'Product description must be at least 10 characters.',
 
@@ -46,11 +54,11 @@ class EditProduct extends FormRequest
             'image.mimes'          => 'Allowed image formats: jpeg, png, jpg, gif, svg, webp.',
             'image.max'            => 'Image size must not exceed 2MB.',
 
-            
+
             'price.numeric'        => 'Product price must be a valid number.',
             'price.min'            => 'Product price must be greater than 0.',
 
-            
+
             'quantity.integer'     => 'Product quantity must be a number.',
             'quantity.min'         => 'Product quantity must be at least 1.',
             'quantity.max'         => 'Product quantity cannot exceed 10,000.',

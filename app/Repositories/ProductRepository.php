@@ -32,15 +32,12 @@ class ProductRepository implements BaseRepository
         return $this->model->create($data);
     }
 
-    public function update($id, array $data)
+    public function update( $product,  $data)
     {
-        $product = $this->model->find($id);
-        if ($product) {
-            $product->update($data);
-            return $product;
-        }
-        return null;
+        $product->update($data);
+        return $product;
     }
+
 
     public function delete($product)
     {
@@ -52,8 +49,8 @@ class ProductRepository implements BaseRepository
         return $this->query()
             ->when($q, function ($query) use ($q) {
                 $query->where('title', 'like', "%{$q}%")
-                ->orWhere('description','like',"%{$q}%")
-                ->orwhere('price','<=',(float)$q);
+                    ->orWhere('description', 'like', "%{$q}%")
+                    ->orwhere('price', '<=', (float)$q);
             });
     }
 

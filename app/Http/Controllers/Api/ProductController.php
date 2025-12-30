@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
+use App\Http\Requests\EditProduct;
 use App\Http\Requests\StoreProduct;
 use App\Http\Controllers\Controller;
 
@@ -47,10 +48,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $productId)
+    public function show(Product $product)
     {
         try {
-            $product = $this->productService->show($productId);
+            $product = $this->productService->show($product);
             return response()->json(['Product details' => $product], 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Product Does not exists'], 500);
@@ -60,18 +61,26 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(EditProduct $request, Product $product)
     {
-        //
+        $data = $request->validated();
+
+        $this->productService->update($product, $data);
+
+        return response()->json([
+            'message' => 'Product updated successfully',
+            'data' => $product->fresh()
+        ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($productId)
+    public function destroy(Product $product)
     {
         try {
-            $this->productService->destroy($productId);
+            $this->productService->destroy($product);
             return response()->json(['message' => 'Product Deleted'], 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Failed to Destroy product'], 500);

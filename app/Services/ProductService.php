@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Repositories\ProductRepository;
@@ -51,10 +52,8 @@ class ProductService
         return $image->store('products', 'public');
     }
 
-    public function destroy(int $productId): void
+    public function destroy(Product $product): void
     {
-        $product = $this->repository->find($productId);
-
         if (! $product) {
             throw new \Exception('Product not found');
         }
@@ -65,13 +64,24 @@ class ProductService
         $this->repository->delete($product);
     }
 
-    public function show(int $productId)
+    public function show(Product $product)
     {
-        $product = $this->repository->find($productId);
         if (! $product) {
             throw new \Exception('Product not found');
         }
         return $product;
     }
-    public function update(array $data) {}
+    public function update(Product $product, array $data)
+    {
+        if (isset($data['image'])) {
+            // delete old image if exists
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+            // store new image
+            $data['image'] = $data['image']->store('products', 'public');
+        }
+
+        return $this->repository->update($product, $data);
+    }
 }
