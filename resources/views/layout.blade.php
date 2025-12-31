@@ -42,13 +42,13 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
+                        <a class="nav-link " href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('products') }}">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pharmacies</a>
+                        <a class="nav-link" href="{{ route('pharmacies') }}">Pharmacies</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Logout</a>

@@ -17,7 +17,7 @@ class PharmacyRepository implements BaseRepository
     }
     public function query()
     {
-        return $this->model->newQuery();
+        return $this->model->newQuery()->orderByDesc('id');
     }
 
     public function find($id){
